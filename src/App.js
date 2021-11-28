@@ -1,25 +1,28 @@
-import logo from './logo.svg';
+import React from "react";
+
 import './App.css';
+import CssBaseline from "@material-ui/core/CssBaseline";
+import { BrowserRouter } from "react-router-dom";
+import {useRoutes} from "./routes";
+import {useAuth} from "./context/AuthContext";
+import {NavBar} from "./components/NavBar";
 
 function App() {
+  const {loading, currentUser } = useAuth();
+  const routes = useRoutes(currentUser);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <BrowserRouter>
+        <CssBaseline />
+        {loading ? 'Loading' : (
+          <React.Fragment>
+          {currentUser && <NavBar />}
+          <div className="container">
+            {routes}
+          </div>
+        </React.Fragment>)}
+      </BrowserRouter>
   );
-}
+};
 
 export default App;
